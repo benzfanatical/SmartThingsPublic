@@ -17,7 +17,7 @@
  */
 
 metadata {
-	definition(name: "LED CPX light", namespace: "SAMSUNG LED", author: "SAMSUNG LED") {
+	definition(name: "LED CPX light", namespace: "SAMSUNG LED", author: "SAMSUNG LED", ocfDeviceType: "oic.d.light") {
 		
 		capability "Actuator"
 		capability "Color Temperature"
@@ -28,10 +28,10 @@ metadata {
 		capability "Switch Level"
 		
 		// ABL Lithonia
-		fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0008, 0300, 0406", outClusters: "0019", manufacturer: "Lithonia", model: "ABL-LIGHTSENSOR-Z-001", deviceJoinName: "CPX Smart Panel Light", mnmn: "Samsung Electronics", vid: "SAMSUNG-ITM-Z-001"
+		fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0008, 0300, 0406", outClusters: "0019", manufacturer: "Lithonia", model: "ABL-LIGHTSENSOR-Z-001", deviceJoinName: "CPX Smart Panel Light", mnmn: "Samsung Electronics", vid: "ABL-LIGHTSENSOR-Z-001"
 		
 		// Samsung LED
-		fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0008, 0300, 0406", outClusters: "0019", manufacturer: "Samsung Electronics", model: "SAMSUNG-ITM-Z-004", deviceJoinName: "ITM CPX Light", mnmn: "Samsung Electronics", vid: "SAMSUNG-ITM-Z-001"
+		fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0008, 0300, 0406", outClusters: "0019", manufacturer: "Samsung Electronics", model: "SAMSUNG-ITM-Z-004", deviceJoinName: "ITM CPX Light", mnmn: "Samsung Electronics", vid: "SAMSUNG-ITM-Z-004"
 	}
 
 	// UI tile definitions
@@ -144,7 +144,10 @@ def setColorTemperature(value) {
 }
 
 def installed() {
-	addChildSensor()
+	if ((device.currentState("level")?.value == null) || (device.currentState("level")?.value == 0)) {
+			sendEvent(name: "level", value: 100)
+	}
+	addChildSensor()	
 }
 
 def addChildSensor() {
